@@ -52,6 +52,9 @@
   <ItemGroup>
     <Compile Include="Classes\Calculator.cs" />
     <Compile Include="Interfaces\ICalculator.cs" />
+    <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Interfaces\ITaxRateService.cs" />
+    <Compile Include="POCOS\TaxRate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

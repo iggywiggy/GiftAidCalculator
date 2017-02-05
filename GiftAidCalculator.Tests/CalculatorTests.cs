@@ -31,6 +31,12 @@ namespace GiftAidCalculator.Tests
         }
 
         [Test]
+        public void CalculateGiftAid_ParamDonationAmount_NegativeFive_ThrowsArgumentOutOfRangeException()
+        {
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => _calculator.CalculateGiftAid(-5));
+        }
+
+        [Test]
         public void CalculateGiftAid_ReturnType_Decimal()
         {
             var result = _calculator.CalculateGiftAid(20m);
