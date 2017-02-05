@@ -12,7 +12,8 @@ namespace GiftAidCalculator.TestConsole.Classes
                 throw new ArgumentOutOfRangeException($"{nameof(donationAmount)} cannot be zero or less");
             }
 
-            return 0;
+            var gaRatio = 17.5m / (100 - 17.5m);
+            return donationAmount * gaRatio;
         }
     }
 }
