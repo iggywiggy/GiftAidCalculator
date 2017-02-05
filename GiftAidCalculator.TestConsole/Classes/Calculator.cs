@@ -11,9 +11,13 @@ namespace GiftAidCalculator.TestConsole.Classes
             {
                 throw new ArgumentOutOfRangeException($"{nameof(donationAmount)} cannot be zero or less");
             }
+            
+            return donationAmount * GiftAidRation();
+        }
 
-            var gaRatio = 20m / (100 - 20m);
-            return donationAmount * gaRatio;
+        private decimal GiftAidRation()
+        {
+            return 20m/(100 - 20m);
         }
     }
 }
