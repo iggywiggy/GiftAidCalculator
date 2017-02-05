@@ -54,6 +54,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GiftAidCalculator.TestConsole\GiftAidCalculator.TestConsole.csproj">
+      <Project>{AD507362-C20C-446D-B4E8-5194AF6EFC06}</Project>
+      <Name>GiftAidCalculator.TestConsole</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
