@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Net;
 using GiftAidCalculator.TestConsole.Classes;
 using GiftAidCalculator.TestConsole.Interfaces;
+using Moq;
 using NUnit.Framework;
 
 namespace GiftAidCalculator.Tests
@@ -10,18 +10,19 @@ namespace GiftAidCalculator.Tests
     public class CalculatorTests
     {
         private ICalculator _calculator;
+        private Mock<ITaxRateService> _taxRateService;
 
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
-            _calculator = new Calculator();
+            _taxRateService = new Mock<ITaxRateService>();
+            _calculator = new Calculator(_taxRateService.Object);
         }
 
         [Test]
         public void Calculator_IsInstanceOf_ICalculator()
         {
-            var calculator = new Calculator();
-            Assert.IsInstanceOf(typeof(ICalculator), calculator);
+            Assert.IsInstanceOf(typeof(ICalculator), _calculator);
         }
 
         [Test]
@@ -43,17 +44,24 @@ namespace GiftAidCalculator.Tests
             Assert.IsInstanceOf(typeof(decimal), result);
         }
 
-        [Test]
-        [TestCase(100, ExpectedResult = 25)]
-        [TestCase(20, ExpectedResult = 5)]
-        [TestCase(50, ExpectedResult = 12.5)]
-        [TestCase(250, ExpectedResult = 62.50)]
-        [TestCase(5, ExpectedResult = 1.25)]
-        [TestCase(500, ExpectedResult = 125.00)]
-        [TestCase(55.50, ExpectedResult = 13.8750)]
-        [TestCase(23.45, ExpectedResult = 5.8625)]
-        public decimal CalculateGiftAid(decimal donationAmount)
+        private void SetUpTaxServiceMock(decimal taxRate)
         {
+            _taxRateService.Setup(r => r.GetTaxRate()).Returns(taxRate);
+        }
+
+        [Test]
+        [TestCase(100,20, ExpectedResult = 25)]
+        [TestCase(20, 20, ExpectedResult = 5)]
+        [TestCase(50, 20, ExpectedResult = 12.5)]
+        [TestCase(250,20, ExpectedResult = 62.50)]
+        [TestCase(5, 20, ExpectedResult = 1.25)]
+        [TestCase(500, 20, ExpectedResult = 125.00)]
+        [TestCase(55.50, 20, ExpectedResult = 13.8750)]
+        [TestCase(23.45, 20, ExpectedResult = 5.8625)]
+        public decimal CalculateGiftAid(decimal donationAmount, decimal taxRate)
+        {
+            SetUpTaxServiceMock(taxRate);
+
             return _calculator.CalculateGiftAid(donationAmount);
         }
 

@@ -8,7 +8,6 @@ namespace GiftAidCalculator.TestConsole.POCOS
 {
     public class TaxRate
     {
-        public int Id { get; set; }
         public decimal Rate { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime DateInserted { get; set; }
