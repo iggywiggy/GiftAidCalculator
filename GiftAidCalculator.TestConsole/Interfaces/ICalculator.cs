@@ -1,7 +1,9 @@
-﻿namespace GiftAidCalculator.TestConsole.Interfaces
+﻿using GiftAidCalculator.TestConsole.Enums;
+
+namespace GiftAidCalculator.TestConsole.Interfaces
 {
     public interface ICalculator
     {
-        decimal CalculateGiftAid(decimal donationAmount);
+        decimal CalculateGiftAid(decimal donationAmount, EventTypeEnum eventType);
     }
 }

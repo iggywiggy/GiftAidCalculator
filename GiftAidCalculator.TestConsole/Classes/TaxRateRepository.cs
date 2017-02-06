@@ -22,7 +22,6 @@ namespace GiftAidCalculator.TestConsole.Classes
                     Rate = 17.5m
                 }
             };
-
         }
 
         public TaxRate Update(TaxRate entity)
@@ -58,6 +57,10 @@ namespace GiftAidCalculator.TestConsole.Classes
 
         public TaxRate Insert(TaxRate entity)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
             _taxRates.Add(entity);
 
             return entity;

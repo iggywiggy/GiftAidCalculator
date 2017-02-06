@@ -7,7 +7,6 @@ using Microsoft.Practices.Unity;
 
 namespace GiftAidCalculator.TestConsole.Commands
 {
- 
     public class CommandFactory : ICommandFactory
     {
         private IDictionary<RoleEnum, Type> _commandsDictionary;

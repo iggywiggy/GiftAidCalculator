@@ -1,6 +1,4 @@
-﻿using GiftAidCalculator.TestConsole.POCOS;
-
-namespace GiftAidCalculator.TestConsole.Interfaces
+﻿namespace GiftAidCalculator.TestConsole.Interfaces
 {
     public interface ITaxRateService
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GiftAidCalculator.TestConsole.Interfaces
+﻿namespace GiftAidCalculator.TestConsole.Interfaces
 {
     public interface ICommand
     {

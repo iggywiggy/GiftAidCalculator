@@ -9,11 +9,20 @@ namespace GiftAidCalculator.TestConsole.Commands
 
         public AdministratorCommand(ITaxRateService taxRateService)
         {
+            if (taxRateService == null)
+            {
+                throw new ArgumentNullException(nameof(taxRateService));
+            }
             _taxRateService = taxRateService;
         }
 
         public void Execute(object[] args)
         {
+            if (args == null)
+            {
+                throw new ArgumentNullException(nameof(args));
+            }
+
             var taxRate = decimal.Parse(args[0].ToString());
             if (taxRate <= 0)
             {

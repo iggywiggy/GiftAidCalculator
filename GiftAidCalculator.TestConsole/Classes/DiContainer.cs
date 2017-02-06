@@ -34,7 +34,9 @@ namespace GiftAidCalculator.TestConsole.Classes
             Container.RegisterType<ICommand, DonorCommand>("DonorCommand");
             Container.RegisterType<ICalculator, Calculator>();
             Container.RegisterType<ITaxRateService, TaxRateService>();
-            Container.RegisterType<IRepository<TaxRate>, TaxRateRepository>();
+            Container.RegisterType<IRepository<TaxRate>, TaxRateRepository>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IRepository<Event>, EventRepository>();
+            Container.RegisterType<IEventService, EventService>();
         }
 
         public ICommandFactory ResolveCommandFactory()

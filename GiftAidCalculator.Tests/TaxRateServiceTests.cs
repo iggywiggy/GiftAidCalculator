@@ -28,57 +28,24 @@ namespace GiftAidCalculator.Tests
             _taxRates = null;
         }
 
-        [Test]
-        public void TaxRateService_Construtor_ParamRepositoryNull_ThrowsArgumentNullException()
+        private IMock<IRepository<TaxRate>> SetupRepoMock(decimal taxRate)
         {
-            Assert.Throws(typeof (ArgumentNullException), () => new TaxRateService(null));
-        }
+            var newTaxRate = new TaxRate
+            {
+                DateInserted = DateTime.Now,
+                Rate = taxRate
+            };
 
-        [Test]
-        public void TaxRateService_IsInstanceOf_ITaxRateService()
-        {
             var repositoryMock = new Mock<IRepository<TaxRate>>();
-            Assert.IsInstanceOf(typeof (ITaxRateService), new TaxRateService(repositoryMock.Object));
-        }
+            repositoryMock.Setup(r => r.Update(_taxRates.FirstOrDefault()));
+            repositoryMock.Setup(
+                r => r.Insert(newTaxRate)).Returns(newTaxRate);
 
-        [Test]
-        public void SetNewTaxRate_ParamTaxRate_Zero_ThrowsArgumentOutOfRangeException()
-        {
-            Assert.Throws(typeof (ArgumentOutOfRangeException), () => _taxRateService.SetNewTaxRate(0));
-        }
+            repositoryMock.Setup(r => r.Select(rate => rate.IsDeleted == false))
+                .Returns(() => _taxRates.Where(rate1 => rate1.IsDeleted == false))
+                .Callback(() => _taxRates.Add(newTaxRate));
 
-        [Test]
-        public void SetNewTaxRate_ParamTaxRate_NegativeTen_ThrowsArgumentOutOfRangeException()
-        {
-            Assert.Throws(typeof (ArgumentOutOfRangeException), () => _taxRateService.SetNewTaxRate(-10));
-        }
-
-        [Test]
-        [TestCase(20, ExpectedResult = 20)]
-        [TestCase(17.5, ExpectedResult = 17.5)]
-        [TestCase(25, ExpectedResult = 25)]
-        [TestCase(13.54, ExpectedResult = 13.54)]
-        public decimal SetNewTaxRate_LatestTaxRate(decimal taxRate)
-        {
-            _taxRates = new List<TaxRate>();
-
-            _taxRateService = new TaxRateService(SetupRepoMock(taxRate).Object);
-
-            var rate = _taxRateService.GetTaxRate();
-
-            return rate;
-        }
-
-        [Test]
-        public void CreateNewTaxRate_ParamNewTaxRate_Zero_ThrowsArgumentOutOfRangeException()
-        {
-            Assert.Throws(typeof (ArgumentOutOfRangeException), () => _taxRateService.SetNewTaxRate(0));
-        }
-
-        [Test]
-        public void CreateNewTaxRate_ParamNewTaxRate_NegativeOne_ThrowsArgumentOutOfRangeException()
-        {
-            Assert.Throws(typeof (ArgumentOutOfRangeException), () => _taxRateService.SetNewTaxRate(-1));
+            return repositoryMock;
         }
 
         [Test]
@@ -107,6 +74,18 @@ namespace GiftAidCalculator.Tests
         }
 
         [Test]
+        public void CreateNewTaxRate_ParamNewTaxRate_NegativeOne_ThrowsArgumentOutOfRangeException()
+        {
+            Assert.Throws(typeof (ArgumentOutOfRangeException), () => _taxRateService.SetNewTaxRate(-1));
+        }
+
+        [Test]
+        public void CreateNewTaxRate_ParamNewTaxRate_Zero_ThrowsArgumentOutOfRangeException()
+        {
+            Assert.Throws(typeof (ArgumentOutOfRangeException), () => _taxRateService.SetNewTaxRate(0));
+        }
+
+        [Test]
         public void SetLatestTaxRate_NoTaxRateSet_CountTaxRateOne()
         {
             _taxRates = new List<TaxRate>();
@@ -118,25 +97,45 @@ namespace GiftAidCalculator.Tests
             Assert.IsTrue(_taxRates.Count == 1);
         }
 
-        private IMock<IRepository<TaxRate>> SetupRepoMock(decimal taxRate)
+        [Test]
+        [TestCase(20, ExpectedResult = 20)]
+        [TestCase(17.5, ExpectedResult = 17.5)]
+        [TestCase(25, ExpectedResult = 25)]
+        [TestCase(13.54, ExpectedResult = 13.54)]
+        public decimal SetNewTaxRate_LatestTaxRate(decimal taxRate)
         {
-            var newTaxRate = new TaxRate
-            {
-                DateInserted = DateTime.Now,
-                Rate = taxRate
-            };
+            _taxRates = new List<TaxRate>();
 
-            var repositoryMock = new Mock<IRepository<TaxRate>>();
-            repositoryMock.Setup(r => r.Update(_taxRates.FirstOrDefault()));
-            repositoryMock.Setup(
-                r => r.Insert(newTaxRate)).Returns(newTaxRate);
+            _taxRateService = new TaxRateService(SetupRepoMock(taxRate).Object);
 
-            repositoryMock.Setup(r => r.Select(rate => rate.IsDeleted == false))
-                .Returns(() => _taxRates.Where(rate1 => rate1.IsDeleted == false))
-                .Callback(() => _taxRates.Add(newTaxRate));
+            var rate = _taxRateService.GetTaxRate();
 
-            return repositoryMock;
+            return rate;
         }
 
+        [Test]
+        public void SetNewTaxRate_ParamTaxRate_NegativeTen_ThrowsArgumentOutOfRangeException()
+        {
+            Assert.Throws(typeof (ArgumentOutOfRangeException), () => _taxRateService.SetNewTaxRate(-10));
+        }
+
+        [Test]
+        public void SetNewTaxRate_ParamTaxRate_Zero_ThrowsArgumentOutOfRangeException()
+        {
+            Assert.Throws(typeof (ArgumentOutOfRangeException), () => _taxRateService.SetNewTaxRate(0));
+        }
+
+        [Test]
+        public void TaxRateService_Construtor_ParamRepositoryNull_ThrowsArgumentNullException()
+        {
+            Assert.Throws(typeof (ArgumentNullException), () => new TaxRateService(null));
+        }
+
+        [Test]
+        public void TaxRateService_IsInstanceOf_ITaxRateService()
+        {
+            var repositoryMock = new Mock<IRepository<TaxRate>>();
+            Assert.IsInstanceOf(typeof (ITaxRateService), new TaxRateService(repositoryMock.Object));
+        }
     }
 }
